@@ -17,6 +17,10 @@ function install(){
 }
 
 case $1 in
+    clean)
+        clean
+        ;;
+
     install)
         install
         clean
@@ -30,6 +34,7 @@ case $1 in
     publish)
         build
          twine upload --repository-url https://upload.pypi.org/legacy/ dist/*
+        clean
         ;;
     * )
         echo "Need param from one of build|install|publish"
