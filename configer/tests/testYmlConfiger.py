@@ -16,7 +16,7 @@ class TestYmlConfiger:
     def test_get(self, ymlConfiger):
         assert ymlConfiger.get('ad') == 12
 
-    def test_verbose_get(self,ymlConfiger):
+    def test_verbose_get(self, ymlConfiger):
         verbose_return = ymlConfiger.get('ad', verbose=True)
         assert verbose_return[0] == 12
         assert 'pytestSample-2.yaml' in verbose_return[1]
