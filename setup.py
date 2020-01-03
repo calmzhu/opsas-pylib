@@ -3,11 +3,11 @@
 """
 distutils/setuptools install script.
 """
+import importlib
 import os
 import sys
 
 import setuptools
-import importlib
 
 ROOT = os.path.dirname(__file__)
 
@@ -22,6 +22,8 @@ def get_version():
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
+with open("requirements.txt", "r") as fh:
+    requirements = fh.read().split("\n")
 setuptools.setup(
     name="opsas configer",
     version=get_version(),
@@ -32,6 +34,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/pipeline-factory/py-configerAdapter",
     packages=setuptools.find_packages(),
+    install_requires=requirements,
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
