@@ -29,10 +29,10 @@ setuptools.setup(
     version=get_version(),
     author="Calm Zhu",
     author_email="saint@justcalm.org",
-    description="A configer Adapter for python",
+    description="A python utils collection for devops",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/pipeline-factory/py-configerAdapter",
+    url="https://github.com/calmzhu/opsas-pylib",
     packages=setuptools.find_packages(),
     install_requires=requirements,
     classifiers=[

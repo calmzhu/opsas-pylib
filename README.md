@@ -1,7 +1,11 @@
 # py-configerAdapter
-[![Build Status](https://github.com/pipeline-factory/py-configerAdapter/workflows/build/badge.svg)](https://github.com/pipeline-factory/py-configerAdapter/actions)
-[![Documentation Status](https://readthedocs.org/projects/py-configeradapter/badge/?version=latest)](https://readthedocs.org/projects/py-configeradapter/badge/?version=latest)
+[![Build Status](https://github.com/calmzhu/opsas-pylib/workflows/build/badge.svg)](https://github.com/calmzhu/opsas-pylib/actions)
+[![Documentation Status](https://readthedocs.org/projects/opsas-pylib/badge/?version=latest)](https://readthedocs.org/projects/opsas-pylib/badge/?version=latest)
 
+## Install
+```
+    pip install opsas-libs 
+```
 
 ## Concern:
 
