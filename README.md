@@ -1,10 +1,10 @@
-# py-configerAdapter
+# opsas-pylib
 [![Build Status](https://github.com/calmzhu/opsas-pylib/workflows/build/badge.svg)](https://github.com/calmzhu/opsas-pylib/actions)
 [![Documentation Status](https://readthedocs.org/projects/opsas-pylib/badge/?version=latest)](https://opsas-pylib.readthedocs.io/en/latest/)
 
 ## Install
 ```
-    pip install opsas-libs 
+    pip install opsas-pylib 
 ```
 
 ## Concern:

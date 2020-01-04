@@ -13,11 +13,12 @@
 import os
 import sys
 
-sys.path.insert(0, os.path.abspath('..'))
+ROOT = os.path.abspath('..')
+sys.path.insert(0, os.path.join(ROOT, 'src'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'Opsas configer'
+project = 'opsas-pylib'
 copyright = '2019, calmzhu'
 author = 'calmzhu'
 

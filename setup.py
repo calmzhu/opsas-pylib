@@ -9,13 +9,13 @@ import sys
 
 import setuptools
 
-ROOT = os.path.dirname(__file__)
+ROOT = os.path.join(os.path.dirname(__file__), 'src')
 
 sys.path.append(ROOT)
 
 
 def get_version():
-    module = importlib.import_module("configer")
+    module = importlib.import_module("opsas")
     return module.VERSION
 
 
@@ -25,11 +25,11 @@ with open("README.md", "r") as fh:
 with open("requirements.txt", "r") as fh:
     requirements = fh.read().split("\n")
 setuptools.setup(
-    name="opsas configer",
+    name="opsas-pylib",
     version=get_version(),
     author="Calm Zhu",
     author_email="saint@justcalm.org",
-    description="A python utils collection for devops",
+    description="operation should as a service",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/calmzhu/opsas-pylib",
