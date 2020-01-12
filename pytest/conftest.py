@@ -1,14 +1,18 @@
-import pytest
-import os
 import logging
+import os
+import sys
+
+import pytest
+
+test_base = os.path.dirname(__file__)
+sys.path.insert(0, os.path.join(os.path.dirname(test_base), 'src'))
+environment = os.environ.setdefault("environment", "local")
+
 from opsas.configer.YmlConfiger import YmlConfiger
 
 logging.basicConfig()
 logger = logging.getLogger('pytest')
 formatter_str = "%(asctime)s %(message)s"
-
-test_base = os.path.dirname(__file__)
-environment = os.environ.setdefault("environment", "local")
 
 configer = YmlConfiger(ordered_file_paths=[os.path.join(test_base, f'config.{environment}.yaml')], logger=logger)
 
