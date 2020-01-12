@@ -2,7 +2,7 @@ import os
 
 import pytest
 
-from ..ymlConfiger import YmlConfiger
+from ..YmlConfiger import YmlConfiger
 
 
 @pytest.fixture(scope='class')
@@ -20,3 +20,7 @@ class TestYmlConfiger:
         verbose_return = ymlConfiger.get('ad', verbose=True)
         assert verbose_return[0] == 12
         assert 'pytestSample-2.yaml' in verbose_return[1]
+
+    def test_env_inject(self, ymlConfiger):
+        environment = ymlConfiger.get("running_env")
+        assert environment == os.environ['environment']

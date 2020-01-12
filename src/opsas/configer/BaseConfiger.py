@@ -6,9 +6,6 @@ class BaseConfiger:
             logger = logging.getLogger(__name__)
         self.logger = logger
 
-    def set_logger(self, logger):
-        self.logger = logger
-
     def render_data_map(self):
         raise NotImplementedError
 

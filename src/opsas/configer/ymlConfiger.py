@@ -1,4 +1,7 @@
+import os
+
 import yaml
+from jinja2 import Template
 
 from .BaseConfiger import BaseConfiger
 
@@ -21,7 +24,9 @@ class YmlConfiger(BaseConfiger):
         :return: dict|list
         """
         with open(yaml_path, 'r') as f:
-            data = yaml.safe_load(f)
+            data_str = f.read()
+        template = Template(data_str)
+        data = yaml.safe_load(template.render(**os.environ))
         return data
 
     def render_data_map(self) -> dict:
@@ -32,6 +37,9 @@ class YmlConfiger(BaseConfiger):
         data_sources = [(file_path, self.load_yaml(file_path),) for file_path in self.ordered_file_lists]
         data_map = {}
         for file_path, yaml_data in data_sources:
+            if yaml_data is None:
+                self.logger.info(f"Ignore emply file {file_path}")
+                continue
             for k, v in yaml_data.items():
                 if v is None:
                     self.logger.info(f"Ignore None value for {k} in {file_path}")

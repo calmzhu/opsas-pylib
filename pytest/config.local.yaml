@@ -1,0 +1,3 @@
+pytest_loglevel: INFO
+slack_channel: opsas
+slack_channel_token: xoxp-867152376579-867152377235-893729756485-a861e4445b2e5432d4eaa35a14484722
