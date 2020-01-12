@@ -1,4 +1,3 @@
-from .mixins.ConfigerSetter import ConfigerSetter
 from .mixins.LoggerSetter import LoggerSetter
 
 

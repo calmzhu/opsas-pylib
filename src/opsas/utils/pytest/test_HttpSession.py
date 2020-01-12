@@ -12,10 +12,8 @@ def session(pytestLogger, pytestConfiger):
 
 # @pytest.fixture()
 def logger():
-    l = logging.getLogger()
-    l.error('error')
-    print(l.level)
-    return l
+    _ = logging.getLogger()
+    return _
 
 
 class TestHttpSession:
