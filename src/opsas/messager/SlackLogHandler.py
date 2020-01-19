@@ -28,6 +28,10 @@ class SlackMessager(HttpSession):
         payload = self.make_payload(message, infolevel, thread_ts=thread_ts)
         return self.post_payload(payload)
 
+    def create_thread(self, name):
+        response = self.send_text_message(name)
+        return response['ts']
+
     def make_payload(self, message, loglevel, thread_ts=None):
         self.logger.debug(loglevel)
         payload = {
@@ -55,15 +59,30 @@ class SlackMessager(HttpSession):
 
 
 class SlackLogHandler(Handler):
-    def __init__(self, token, channel, logger, title):
+    """
+    Use slack as log handlers
+    :argument
+    token: str, slack bot token
+    channel: str, slack app oauth token
+    logger: local logger used by slack handler
+    """
+    _thread_ts_list = {}
+
+    def __init__(self, token, channel, logger):
         super().__init__()
         self.bot = SlackMessager(token=token, channel=channel, logger=logger)
-        self.msg_ts = self.start_slack_thread(title)
+        print("__II")
 
-    def start_slack_thread(self, title):
-        response = self.bot.send_text_message(title)
-        return response['ts']
+    """
+    slackloghandler will send message to slack channel by default.
+    When used create sessopm, all logs will send as reply to this message
+    """
+
+    def create_session(self, name):
+        self._thread_ts_list[name] = self.bot.create_thread(name)
 
     def emit(self, record):
         msg = self.format(record)
-        return self.bot.send_message(message=msg, infolevel=record.levelname.lower(), thread_ts=self.msg_ts)
+        thread_name = record.name
+        thread_ts = self._thread_ts_list.get(thread_name, None)
+        return self.bot.send_message(message=msg, infolevel=record.levelname.lower(), thread_ts=thread_ts)

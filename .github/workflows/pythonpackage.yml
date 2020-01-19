@@ -34,4 +34,5 @@ jobs:
           pytest --rootdir pytest
         env:
           environment: github_ci
-          slack_token: ${{ secrets.slack_token }}
+          slack_channel: ${{ secrets.SLACK_CHANNEL }}
+          slack_app_token: ${{ secrets.SLACK_APP_TOKEN }}

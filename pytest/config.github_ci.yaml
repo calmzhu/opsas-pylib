@@ -1,1 +1,3 @@
 pytest_loglevel: INFO
+slack_channel: {{ slack_channel }}
+slack_channel_token: {{ slack_app_token }}
