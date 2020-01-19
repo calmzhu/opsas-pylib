@@ -24,6 +24,7 @@ with open("README.md", "r") as fh:
 
 with open("requirements.txt", "r") as fh:
     requirements = fh.read().split("\n")
+# Todo Remove test files from release
 setuptools.setup(
     name="opsas-pylib",
     version=get_version(),
@@ -33,7 +34,8 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/calmzhu/opsas-pylib",
-    packages=setuptools.find_packages(),
+    package_dir={"": "src"},
+    packages=setuptools.find_packages("src", exclude=["test_*", "*.pytest", "tests"]),
     install_requires=requirements,
     classifiers=[
         "Programming Language :: Python :: 3",
