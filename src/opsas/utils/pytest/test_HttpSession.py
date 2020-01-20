@@ -1,6 +1,6 @@
-from ..HttpSession import HttpSession
 import pytest
-import logging
+
+from ..HttpSession import HttpSession
 
 
 @pytest.fixture(scope='class')
@@ -8,12 +8,6 @@ def session(pytestLogger, pytestConfiger):
     s = HttpSession(logger=pytestLogger, endpoint="https://jsonplaceholder.typicode.com")
     yield s
     s.session.close()
-
-
-# @pytest.fixture()
-def logger():
-    _ = logging.getLogger()
-    return _
 
 
 class TestHttpSession:
@@ -28,4 +22,3 @@ class TestHttpSession:
     def test_request_conn_post(self, session):
         user_data = {"id": 13, 'name': "Test13"}
         conn = session.request_conn("/users/", 'post', data=user_data)
-        print(conn.json())

@@ -2,18 +2,35 @@ import base64
 import urllib
 
 import requests
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
 
 from .BasicUtilClass import BaseUtilClass
 
 
 class HttpSession(BaseUtilClass):
-    def __init__(self, logger, endpoint=None, timeout=5):
+    def __init__(self, logger, endpoint=None, max_retries=3, timeout=5):
         super().__init__(logger)
-        session = requests.Session()
-        session.headers = {}
-        session.timeout = timeout
+        self.max_retries = max_retries
+        self.timeout = timeout
         self.endpoint = endpoint
-        self.session = session
+        self.session = self.setup_session()
+
+    def setup_session(self):
+        session = requests.session()
+        session.headers = {}
+        retry = Retry(
+            total=self.max_retries,
+            read=self.max_retries,
+            connect=self.max_retries,
+            backoff_factor=0.3,
+            status_forcelist=(500, 502, 504)
+        )
+        adapter = HTTPAdapter(max_retries=retry)
+        session.mount('http://', adapter)
+        session.mount('https://', adapter)
+
+        return session
 
     def set_http_basic_auth_headers(self, username, token):
         encoding = self.encoding if hasattr(self, 'encoding') else 'utf-8'
@@ -35,7 +52,7 @@ class HttpSession(BaseUtilClass):
         requests_params = dict(
             headers=self.session.headers,
             verify=False,
-            timeout=self.session.timeout,
+            timeout=self.timeout
         )
 
         if self.session.headers.get('Content-Type') in ["application/json"]:
@@ -48,7 +65,7 @@ class HttpSession(BaseUtilClass):
             conn = self.session.request(method, requests_path, **requests_params)
             self.logger.info(f'{method} url {requests_path}')
         except (requests.exceptions.ReadTimeout, requests.exceptions.ConnectTimeout) as Error:
-            print(Error)
+            self.logger.error(Error)
             conn = None
         return conn
 
