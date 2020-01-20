@@ -71,7 +71,6 @@ class SlackLogHandler(Handler):
     def __init__(self, token, channel, logger):
         super().__init__()
         self.bot = SlackMessager(token=token, channel=channel, logger=logger)
-        print("__II")
 
     """
     slackloghandler will send message to slack channel by default.
