@@ -1,10 +1,10 @@
-from .mixins.LoggerSetter import LoggerSetter
-
-
-class BaseUtilClass(LoggerSetter):
-    def __init__(self, Logger=None):
+class BaseUtilClass:
+    def __init__(self, logger=None):
         """
         All function class should mixin or inherit from thisyou
         :param Logger:
         """
-        self.setLogger(Logger)
+        if logger is None:
+            import logging
+            logger = logging.getLogger(__name__)
+        self.logger = logger

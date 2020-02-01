@@ -3,13 +3,13 @@ import time
 
 import pytest
 
-from ..SlackLogHandler import SlackLogHandler
-from ..SlackLogHandler import SlackMessager
+from opsas.utils.SlackLogHandler import SlackLogHandler
+from opsas.utils.SlackLogHandler import SlackMessager
 
 
 @pytest.fixture(scope='class')
-def bot(pytestConfiger, pytestLogger) -> SlackMessager:
-    bot = SlackMessager(logger=pytestLogger, channel='opsas', token=pytestConfiger.get('slack_channel_token'))
+def bot(pytestConfigClient, pytestLogger) -> SlackMessager:
+    bot = SlackMessager(logger=pytestLogger, channel='opsas', token=pytestConfigClient.get('slack_channel_token'))
     yield bot
     bot.session.close()
 
@@ -31,9 +31,9 @@ class TestSlackMessager:
 
 
 @pytest.fixture(scope="class")
-def slackLogHandler(pytestConfiger, pytestLogger):
-    slackLogHandler = SlackLogHandler(logger=pytestLogger, channel=pytestConfiger.get('slack_channel'),
-                                      token=pytestConfiger.get('slack_channel_token'))
+def slackLogHandler(pytestConfigClient, pytestLogger):
+    slackLogHandler = SlackLogHandler(logger=pytestLogger, channel=pytestConfigClient.get('slack_channel'),
+                                      token=pytestConfigClient.get('slack_channel_token'))
     return slackLogHandler
 
 

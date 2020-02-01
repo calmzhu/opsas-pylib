@@ -1,19 +1,36 @@
 import base64
 import urllib
-
+import time
 import requests
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
 
 from .BasicUtilClass import BaseUtilClass
 
 
 class HttpSession(BaseUtilClass):
-    def __init__(self, logger, endpoint=None, timeout=5):
+    def __init__(self, logger, endpoint=None, max_retries=3, timeout=5):
         super().__init__(logger)
-        session = requests.Session()
-        session.headers = {}
-        session.timeout = timeout
+        self.max_retries = max_retries
+        self.timeout = timeout
         self.endpoint = endpoint
-        self.session = session
+        self.session = self.setup_session()
+
+    def setup_session(self):
+        session = requests.session()
+        session.headers = {}
+        retry = Retry(
+            total=self.max_retries,
+            read=self.max_retries,
+            connect=self.max_retries,
+            backoff_factor=0.3,
+            status_forcelist=(500, 502, 504)
+        )
+        adapter = HTTPAdapter(max_retries=retry)
+        session.mount('http://', adapter)
+        session.mount('https://', adapter)
+
+        return session
 
     def set_http_basic_auth_headers(self, username, token):
         encoding = self.encoding if hasattr(self, 'encoding') else 'utf-8'
@@ -35,7 +52,7 @@ class HttpSession(BaseUtilClass):
         requests_params = dict(
             headers=self.session.headers,
             verify=False,
-            timeout=self.session.timeout,
+            timeout=self.timeout
         )
 
         if self.session.headers.get('Content-Type') in ["application/json"]:
@@ -44,12 +61,19 @@ class HttpSession(BaseUtilClass):
             requests_params["data"] = urllib.parse.urlencode(data)
         else:
             requests_params["data"] = data
-        try:
-            conn = self.session.request(method, requests_path, **requests_params)
-            self.logger.info(f'{method} url {requests_path}')
-        except (requests.exceptions.ReadTimeout, requests.exceptions.ConnectTimeout) as Error:
-            print(Error)
-            conn = None
+        retries = 1
+        while retries < 5:
+            try:
+                conn = self.session.request(method, requests_path, **requests_params)
+                self.logger.debug(f'{method} url {requests_path}')
+                break
+            except (requests.exceptions.ReadTimeout, requests.exceptions.ConnectTimeout,
+                    requests.exceptions.ConnectionError) as Error:
+                retries = retries + 1
+                self.logger.warning(Error)
+                self.logger.warning(f"try connect {retries}th time")
+                time.sleep(3)
+                conn = None
         return conn
 
     def read_json(self, path):
