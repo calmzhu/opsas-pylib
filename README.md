@@ -8,7 +8,7 @@
     pip install opsas-pylib 
 ```
 
-## [Description and Usage](https://opsas-pylib.readthedocs.io/en/latest/)
+## [Read the doc](https://opsas-pylib.readthedocs.io/en/latest/)
 
 
 
