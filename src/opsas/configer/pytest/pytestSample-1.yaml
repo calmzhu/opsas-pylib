@@ -1,3 +1,0 @@
-ad: null
-ada: 123
-running_env: {{ environment }}

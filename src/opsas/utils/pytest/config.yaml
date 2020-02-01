@@ -1,0 +1,2 @@
+env: {{ os_env.get("env") | default("local",True) }}
+port: 8000

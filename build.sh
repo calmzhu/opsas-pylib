@@ -6,6 +6,7 @@ function clean(){
     rm -rf ./build | :
     find . -name "*.egg-info" -exec rm -rf {} +;
     find . -name "*.egg" -exec rm -rf {} +;
+    find . -name "*.pyc" -exec rm -rf {} +;
 }
 
 function build(){
@@ -14,6 +15,10 @@ function build(){
 
 function install(){
    python setup.py install
+}
+
+function doc(){
+  sphinx-build docs/ docs/_build/html/
 }
 
 case $1 in
@@ -35,6 +40,9 @@ case $1 in
         build
          twine upload --repository-url https://upload.pypi.org/legacy/ dist/*
         clean
+        ;;
+    doc)
+        doc
         ;;
     * )
         echo "Need param from one of build|install|publish"

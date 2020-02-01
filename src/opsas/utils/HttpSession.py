@@ -1,6 +1,6 @@
 import base64
 import urllib
-
+import time
 import requests
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
@@ -61,12 +61,19 @@ class HttpSession(BaseUtilClass):
             requests_params["data"] = urllib.parse.urlencode(data)
         else:
             requests_params["data"] = data
-        try:
-            conn = self.session.request(method, requests_path, **requests_params)
-            self.logger.info(f'{method} url {requests_path}')
-        except (requests.exceptions.ReadTimeout, requests.exceptions.ConnectTimeout) as Error:
-            self.logger.error(Error)
-            conn = None
+        retries = 1
+        while retries < 5:
+            try:
+                conn = self.session.request(method, requests_path, **requests_params)
+                self.logger.debug(f'{method} url {requests_path}')
+                break
+            except (requests.exceptions.ReadTimeout, requests.exceptions.ConnectTimeout,
+                    requests.exceptions.ConnectionError) as Error:
+                retries = retries + 1
+                self.logger.warning(Error)
+                self.logger.warning(f"try connect {retries}th time")
+                time.sleep(3)
+                conn = None
         return conn
 
     def read_json(self, path):

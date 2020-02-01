@@ -59,25 +59,63 @@ class SlackMessager(HttpSession):
 
 
 class SlackLogHandler(Handler):
+    """SlackLogHandler for python logging.logger object
+
+    Parameters
+    -----------
+    token: str
+        slack app oauth token
+    channel: str
+        slack channel name
+    logger: logging.logger,optional
+        logger object for logging logs when slackloghandler,
+
+    Note
+    --------
+    This slacklog handler used slack app to sendmessage.
+
+    Create a slack app and follower guides to allow it to connect and chat in channel https://api.slack.com/apps?new_app=1.
+
+    Examples
+    ---------
+
+    >>> import logging
+    >>> logger = logging.getLogger('slack')
+    >>> logging.basicConfig()
+    >>> slackLogHandler = SlackLogHandler(channel='test',token='xxx')
+    >>> logger.addHandler(slackLogHandler)
+    >>> logger.info("info")
+    >>> logger.warning("warnning")
+
+    >>> import logging
+    >>> logging.basicConfig()
+    >>> logger = logging.getLogger("slack")
+    >>> slackLogHandler = SlackLogHandler(channel='test',token='xxx')
+    >>> slackLogHandler.create_session('testDialog')
+    >>> logger.addHandler(slackLogHandler)
+    >>> logger.warning('warining')
+
     """
-    Use slack as log handlers
-    :argument
-    token: str, slack bot token
-    channel: str, slack app oauth token
-    logger: local logger used by slack handler
-    """
+
     _thread_ts_list = {}
 
-    def __init__(self, token, channel, logger):
+    def __init__(self, token, channel, logger=None):
         super().__init__()
         self.bot = SlackMessager(token=token, channel=channel, logger=logger)
 
-    """
-    slackloghandler will send message to slack channel by default.
-    When used create sessopm, all logs will send as reply to this message
-    """
-
     def create_session(self, name):
+        """
+        By default,logs were send to slack channel directly.
+        Can also start a dialog in slack channel and all logs send as reply to this message
+        Parameters
+        ----------
+        name: str
+          dialog name
+
+        Return
+        ---------
+        None
+        """
         self._thread_ts_list[name] = self.bot.create_thread(name)
 
     def emit(self, record):

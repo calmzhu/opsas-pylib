@@ -1,19 +1,16 @@
 ..
 
-Welcome to opsas-pylib's documentation!
+devops实践中的python库
 ==========================================
 
-.. automodule:: opsas.configer.ymlConfiger
+.. automodule:: opsas
+   :members:
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+
+   utils/configclient.rst
+   utils/slackloghandler.rst
 
 
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
 * :ref:`search`

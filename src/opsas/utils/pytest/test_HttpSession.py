@@ -4,7 +4,7 @@ from ..HttpSession import HttpSession
 
 
 @pytest.fixture(scope='class')
-def session(pytestLogger, pytestConfiger):
+def session(pytestLogger, pytestConfigClient):
     s = HttpSession(logger=pytestLogger, endpoint="https://jsonplaceholder.typicode.com")
     yield s
     s.session.close()
